@@ -1,0 +1,198 @@
+import java.time.LocalDateTime;
+import java.util.*;
+
+/* ===================== ENUMS ===================== */
+
+enum SeatStatus {
+    AVAILABLE,
+    BOOKED
+}
+
+enum BookingStatus {
+    CREATED,
+    CONFIRMED,
+    CANCELLED
+}
+
+/* ===================== ENTITIES ===================== */
+
+class User {
+    String userId;
+    String name;
+
+    User(String userId, String name) {
+        this.userId = userId;
+        this.name = name;
+    }
+}
+
+class Movie {
+    String movieId;
+    String title;
+    int durationMinutes;
+
+    Movie(String movieId, String title, int durationMinutes) {
+        this.movieId = movieId;
+        this.title = title;
+        this.durationMinutes = durationMinutes;
+    }
+}
+
+class Seat {
+    String seatId;
+    SeatStatus status;
+
+    Seat(String seatId) {
+        this.seatId = seatId;
+        this.status = SeatStatus.AVAILABLE;
+    }
+}
+
+class Screen {
+    String screenId;
+    List<Seat> seats;
+
+    Screen(String screenId, int seatCount) {
+        this.screenId = screenId;
+        this.seats = new ArrayList<>();
+        for (int i = 1; i <= seatCount; i++) {
+            seats.add(new Seat("S" + i));
+        }
+    }
+}
+
+class Theatre {
+    String theatreId;
+    String name;
+    List<Screen> screens;
+
+    Theatre(String theatreId, String name) {
+        this.theatreId = theatreId;
+        this.name = name;
+        this.screens = new ArrayList<>();
+    }
+}
+
+class Show {
+    String showId;
+    Movie movie;
+    Screen screen;
+    LocalDateTime startTime;
+    double price;
+
+    Show(String showId, Movie movie, Screen screen, LocalDateTime startTime, double price) {
+        this.showId = showId;
+        this.movie = movie;
+        this.screen = screen;
+        this.startTime = startTime;
+        this.price = price;
+    }
+}
+
+class Booking {
+    String bookingId;
+    User user;
+    Show show;
+    List<Seat> bookedSeats;
+    BookingStatus status;
+
+    Booking(String bookingId, User user, Show show, List<Seat> bookedSeats) {
+        this.bookingId = bookingId;
+        this.user = user;
+        this.show = show;
+        this.bookedSeats = bookedSeats;
+        this.status = BookingStatus.CREATED;
+    }
+}
+
+/* ===================== SERVICES ===================== */
+
+class BookingService {
+
+    public Booking bookSeats(User user, Show show, List<String> seatIds) {
+        List<Seat> selectedSeats = new ArrayList<>();
+
+        // Check availability
+        for (String seatId : seatIds) {
+            Seat seat = findSeat(show.screen, seatId);
+            if (seat == null || seat.status == SeatStatus.BOOKED) {
+                throw new RuntimeException("Seat " + seatId + " not available");
+            }
+            selectedSeats.add(seat);
+        }
+
+        // Mark seats booked
+        for (Seat seat : selectedSeats) {
+            seat.status = SeatStatus.BOOKED;
+        }
+
+        Booking booking = new Booking(
+                UUID.randomUUID().toString(),
+                user,
+                show,
+                selectedSeats
+        );
+
+        booking.status = BookingStatus.CONFIRMED;
+        return booking;
+    }
+
+    private Seat findSeat(Screen screen, String seatId) {
+        for (Seat seat : screen.seats) {
+            if (seat.seatId.equals(seatId)) {
+                return seat;
+            }
+        }
+        return null;
+    }
+}
+
+/* ===================== MAIN APPLICATION ===================== */
+
+public class MovieBookingApp {
+
+    public static void main(String[] args) {
+
+        // Create user
+        User user = new User("U1", "Manmohan");
+
+        // Create movie
+        Movie movie = new Movie("M1", "Inception", 148);
+
+        // Create screen with seats
+        Screen screen = new Screen("Screen1", 10);
+
+        // Create theatre
+        Theatre theatre = new Theatre("T1", "PVR Cinemas");
+        theatre.screens.add(screen);
+
+        // Create show
+        Show show = new Show(
+                "SHOW1",
+                movie,
+                screen,
+                LocalDateTime.now().plusHours(2),
+                250.0
+        );
+
+        // Booking service
+        BookingService bookingService = new BookingService();
+
+        // User selects seats
+        List<String> seatIds = Arrays.asList("S1", "S2", "S3");
+
+        // Book ticket
+        Booking booking = bookingService.bookSeats(user, show, seatIds);
+
+        // Print booking details
+        System.out.println("Booking Successful!");
+        System.out.println("Booking ID: " + booking.bookingId);
+        System.out.println("User: " + booking.user.name);
+        System.out.println("Movie: " + booking.show.movie.title);
+        System.out.println("Seats Booked:");
+
+        for (Seat seat : booking.bookedSeats) {
+            System.out.println(" - " + seat.seatId);
+        }
+    }
+}
