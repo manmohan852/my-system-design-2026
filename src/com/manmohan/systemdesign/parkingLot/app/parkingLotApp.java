@@ -5,6 +5,7 @@ import com.manmohan.systemdesign.parkingLot.model.*;
 import com.manmohan.systemdesign.parkingLot.service.ParkingLot;
 import com.manmohan.systemdesign.parkingLot.strategy.allocation.NearestSpotStrategy;
 import com.manmohan.systemdesign.parkingLot.strategy.allocation.SpotAllocationStrategy;
+import com.manmohan.systemdesign.parkingLot.strategy.allocation.VipSpotStrategy;
 import com.manmohan.systemdesign.parkingLot.strategy.pricing.HourlyPricingStrategy;
 import com.manmohan.systemdesign.parkingLot.strategy.pricing.PricingStrategy;
 
@@ -23,7 +24,15 @@ public class parkingLotApp {
 
         PricingStrategy pricingStrategy = new HourlyPricingStrategy();
 
-        SpotAllocationStrategy allocationStrategy = new NearestSpotStrategy();
+        User user = new User("Manmohan", true);
+
+        SpotAllocationStrategy allocationStrategy;
+
+        if (user.isVip()) {
+            allocationStrategy = new VipSpotStrategy();
+        } else {
+            allocationStrategy = new NearestSpotStrategy();
+        }
 
         ParkingLot lot = new ParkingLot(
                 floors,

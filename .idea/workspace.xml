@@ -5,9 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5a9ee0aa-6963-4bf5-ab0f-a842c1e5c061" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/manmohan/systemdesign/moviebooking/model/Booking.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/manmohan/systemdesign/moviebooking/model/Booking.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/manmohan/systemdesign/parkingLot/app/parkingLotApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/manmohan/systemdesign/parkingLot/app/parkingLotApp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/manmohan/systemdesign/parkingLot/model/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/manmohan/systemdesign/parkingLot/model/User.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -95,5 +95,16 @@
       <updated>1767613362399</updated>
     </task>
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>
