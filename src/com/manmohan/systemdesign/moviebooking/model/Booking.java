@@ -1,7 +1,9 @@
 package com.manmohan.systemdesign.moviebooking.model;
 
 import com.manmohan.systemdesign.moviebooking.constants.BookingStatus;
+
 import java.util.List;
+
 
 public class Booking {
     String bookingId;
