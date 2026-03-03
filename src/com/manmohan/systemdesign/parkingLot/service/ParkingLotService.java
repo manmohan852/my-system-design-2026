@@ -13,33 +13,24 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-public class ParkingLot {
+public class ParkingLotService {
 
     private PricingStrategy pricingStrategy;
     private SpotAllocationStrategy allocationStrategy;
 
-
     List<Floor> floors;
 
-    public ParkingLot(List<Floor> floors, PricingStrategy pricingStrategy) {
-        this.floors = floors;
-        this.pricingStrategy = pricingStrategy;
-    }
-    public ParkingLot(List<Floor> floors,
-                      PricingStrategy pricingStrategy,
-                      SpotAllocationStrategy allocationStrategy) {
+    Map<String, Ticket> activeTickets = new HashMap<>();
+
+    public ParkingLotService(List<Floor> floors,
+                             PricingStrategy pricingStrategy,
+                             SpotAllocationStrategy allocationStrategy) {
         this.floors = floors;
         this.pricingStrategy = pricingStrategy;
         this.allocationStrategy = allocationStrategy;
     }
 
-    Map<String, Ticket> activeTickets = new HashMap<>();
-
-    public ParkingLot(List<Floor> floors) {
-        this.floors = floors;
-    }
-
-    public synchronized Ticket parkVehicle(Vehicle vehicle) {
+    public synchronized Ticket parkAndCreateTicket(Vehicle vehicle) {
         for (Floor floor : floors) {
             ParkingSpot spot = allocationStrategy.findSpot(vehicle, floors);
             if (spot != null) {
@@ -52,7 +43,7 @@ public class ParkingLot {
         throw new RuntimeException("No spot available");
     }
 
-    public void removeVehicle(String ticketId) {
+    public void processExit(String ticketId) {
         Ticket ticket = activeTickets.get(ticketId);
         if (ticket == null) {
             throw new RuntimeException("Invalid ticket");

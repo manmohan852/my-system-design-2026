@@ -2,7 +2,7 @@ package com.manmohan.systemdesign.parkingLot.app;
 
 import com.manmohan.systemdesign.parkingLot.constants.SpotType;
 import com.manmohan.systemdesign.parkingLot.model.*;
-import com.manmohan.systemdesign.parkingLot.service.ParkingLot;
+import com.manmohan.systemdesign.parkingLot.service.ParkingLotService;
 import com.manmohan.systemdesign.parkingLot.strategy.allocation.NearestSpotStrategy;
 import com.manmohan.systemdesign.parkingLot.strategy.allocation.SpotAllocationStrategy;
 import com.manmohan.systemdesign.parkingLot.strategy.allocation.VipSpotStrategy;
@@ -12,7 +12,7 @@ import com.manmohan.systemdesign.parkingLot.strategy.pricing.PricingStrategy;
 import java.util.ArrayList;
 import java.util.List;
 
-public class parkingLotApp {
+public class parkingLotMainApp {
     public static void main(String[] args) {
 
         List<ParkingSpot> spots = new ArrayList<>();
@@ -34,7 +34,7 @@ public class parkingLotApp {
             allocationStrategy = new NearestSpotStrategy();
         }
 
-        ParkingLot lot = new ParkingLot(
+        ParkingLotService lot = new ParkingLotService(
                 floors,
                 pricingStrategy,
                 allocationStrategy
@@ -42,8 +42,8 @@ public class parkingLotApp {
 
         Vehicle car = new Car("KA-01-1234");
 
-        Ticket ticket = lot.parkVehicle(car);
+        Ticket ticket = lot.parkAndCreateTicket(car);
 
-        lot.removeVehicle(ticket.getTicketId());
+        lot.processExit(ticket.getTicketId());
     }
 }
